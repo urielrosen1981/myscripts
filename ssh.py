@@ -6,6 +6,7 @@ import os
 import datetime
 import os.path
 import csv
+from itertools import zip_longest
 
 #create file test.27.03.22 ie
 cmd = "DATE=`date +%d-%m-%y` ; touch test.$DATE"
@@ -74,22 +75,25 @@ def sshtohost():
 
         print(slashuse)
         ssh.close()
-    return newiplist ,totalmem; 
+    return newiplist; 
     
         
 hostlist = sshtohost()
 #totalmem = sshtohost()
 newiplistforcsv = sshtohost()
-print (newiplistforcsv)
+print ("hostlist",hostlist)
 def createcsvreport(hostlist):
     print("hostlist",hostlist)
-
-      
-    with open('servers.csv', mode='w') as servers:
+    testlist = [1,2,3]
+    lists = [hostlist,testlist]
+    export_data = zip_longest(*lists, fillvalue = '')
+    with open('servers.csv', mode='w',encoding="ISO-8859-1", newline='') as servers:
         print(hostlist)
-        servers_writer = csv.writer(servers, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
-
-        servers_writer.writerow(hostlist)
+        servers_writer = csv.writer(servers, delimiter=',')
+        servers_writer.writerow(("hosts","testlist"))
+        servers_writer.writerows(export_data)
+        #servers_writer.writerow(newiplistforcsv)
+        #servers_writer
         #servers_writer.writerow(totalmem)
 
 
